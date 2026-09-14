@@ -13,6 +13,7 @@ type Config struct {
 	DBUser     string
 	DBPassword string
 	DBName     string
+	DBURL      string
 	JWTSecret  string
 	ServerAddr string
 }
@@ -28,6 +29,7 @@ func Load() *Config {
 		DBUser:     getEnv("DB_USER", "postgres"),
 		DBPassword: getEnv("DB_PASSWORD", "postgres"),
 		DBName:     getEnv("DB_NAME", "ticketdb"),
+		DBURL:      getEnv("DATABASE_URL", ""),
 		JWTSecret:  getEnv("JWT_SECRET", "default-dev-secret-change-in-prod"),
 		ServerAddr: getEnv("SERVER_ADDR", ":8080"),
 	}
@@ -36,6 +38,9 @@ func Load() *Config {
 }
 
 func (c *Config) DSN() string {
+	if c.DBURL != "" {
+		return c.DBURL
+	}
 	return "host=" + c.DBHost +
 		" port=" + c.DBPort +
 		" user=" + c.DBUser +
