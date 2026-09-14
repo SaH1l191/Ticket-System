@@ -1,0 +1,24 @@
+@import "tailwindcss";
+
+@theme {
+  --color-bg: #f7f5f2;
+  --color-surface: #ffffff;
+  --color-text: #2d2a26;
+  --color-muted: #77716a;
+  --color-border: #e5e0da;
+  --color-accent: #d97757;
+  --color-accent-hover: #c4654a;
+  --color-danger: #c0392b;
+}
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  -webkit-font-smoothing: antialiased;
+}
+
+input, textarea {
+  font-family: inherit;
+}
