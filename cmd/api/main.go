@@ -54,13 +54,13 @@ func main() {
 	}
 
 	userRepo := repo.NewPostgresUserRepo(db)
-	ticketRepo := repo.NewPostgresTicketRepo(db)
+	// ticketRepo := repo.NewPostgresTicketRepo(db)
 
 	authSvc := service.NewAuthService(userRepo)
-	ticketSvc := service.NewTicketService(ticketRepo)
+	// ticketSvc := service.NewTicketService(ticketRepo)
 
 	authH := handler.NewAuthHandler(authSvc)
-	ticketH := handler.NewTicketHandler(ticketSvc)
+	// ticketH := handler.NewTicketHandler(ticketSvc)
 
 	r := router.New(authH, ticketH)
 
