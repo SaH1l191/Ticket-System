@@ -1,20 +1,16 @@
 # Ticket System API
 
-docker build -t ticket-system . && docker run -p 8080:8080 ticket-system
-OR 
-go run ./cmd/api
+A REST API for a ticket management system built with Go, PostgreSQL, and JWT authentication.
 
-A simple REST API for a ticket management system built with Go, SQLite, and JWT authentication.
+## Status Flow
 
-## Features
+```
+open -> in_progress -> closed
+```
 
-- User registration and login with JWT authentication
-- Create, list, and view tickets
-- Ownership-based authorization (users can only see their own tickets)
-- Ticket status workflow: `open` -> `in_progress` -> `closed`
-- SQLite persistence
+A closed ticket cannot be reopened or moved back to `in_progress`.
 
-## API Endpoints
+## Endpoints
 
 | Method | Endpoint                | Description                    | Auth |
 |--------|-------------------------|--------------------------------|------|
@@ -26,31 +22,44 @@ A simple REST API for a ticket management system built with Go, SQLite, and JWT 
 | GET    | /tickets/{id}           | Get a specific ticket by ID    | Yes  |
 | PATCH  | /tickets/{id}/status    | Update ticket status           | Yes  |
 
-## Status Flow
-
-```
-open -> in_progress -> closed
-```
-
-A closed ticket cannot be reopened or moved back to in_progress.
-
 ## Local Run
 
 ```bash
-# Without Docker
-go run ./cmd/api
-
 # With Docker
+docker build -t ticket-system .
+docker run -p 8080:8080 ticket-system
+
+# Or with docker-compose
+docker-compose up --build
+
+# Or directly
+go run ./cmd/api
+```
+
+## Docker
+
+```bash
 docker build -t ticket-system .
 docker run -p 8080:8080 ticket-system
 ```
 
+## Deployment
+
+Deployed URL: https://ticket-system-xi-nine.vercel.app
+
 ## Environment Variables
 
-| Variable    | Default                | Description          |
-|-------------|------------------------|----------------------|
-| JWT_SECRET  | default-dev-secret...  | Secret for JWT signing |
-| DB_PATH     | ./tickets.db           | Path to SQLite file   |
+Copy `.env.example` to `.env` and update values.
+
+| Variable    | Default       | Description          |
+|-------------|---------------|----------------------|
+| JWT_SECRET  | default-dev-secret-change-in-prod | JWT signing secret |
+| DB_HOST     | localhost     | PostgreSQL host      |
+| DB_PORT     | 5432          | PostgreSQL port      |
+| DB_USER     | postgres      | PostgreSQL user      |
+| DB_PASSWORD | postgres      | PostgreSQL password  |
+| DB_NAME     | ticketdb      | PostgreSQL database  |
+| SERVER_ADDR | :8080         | Server address       |
 
 ## Example Usage
 
@@ -65,7 +74,7 @@ curl -X POST http://localhost:8080/auth/login \
   -H "Content-Type: application/json" \
   -d '{"email":"user@example.com","password":"secret123"}'
 
-# Create ticket (use token from login response)
+# Create ticket
 curl -X POST http://localhost:8080/tickets \
   -H "Content-Type: application/json" \
   -H "Authorization: Bearer <token>" \
@@ -84,7 +93,8 @@ curl -X PATCH http://localhost:8080/tickets/<id>/status \
 
 ## Assumptions
 
-- SQLite is used as the persistent store (file-based, no external DB needed).
 - JWT tokens expire after 24 hours.
-- Default JWT secret is used if `JWT_SECRET` is not set (not suitable for production).
-- No admin role or ticket assignment is implemented per requirements.
+- Passwords are stored as bcrypt hashes.
+- Users can only view and update their own tickets.
+- No admin role or ticket assignment is implemented.
+- Default JWT secret is not suitable for production.
