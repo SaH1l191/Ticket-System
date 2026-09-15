@@ -25,11 +25,7 @@ A closed ticket cannot be reopened or moved back to `in_progress`.
 ## Local Run
 
 ```bash
-# With Docker
-docker build -t ticket-system .
-docker run -p 8080:8080 ticket-system
-
-# Or with docker-compose
+with docker-compose
 docker-compose up --build
 
 # Or directly
