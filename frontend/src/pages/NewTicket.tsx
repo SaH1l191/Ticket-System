@@ -1,11 +1,13 @@
-import { useState, type FormEvent } from 'react';
+import { type FormEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useRecoilState } from 'recoil';
 import { api } from '../api';
+import { newTicketTitleState, newTicketDescriptionState, newTicketErrorState } from '../store';
 
 export default function NewTicket() {
-  const [title, setTitle] = useState('');
-  const [description, setDescription] = useState('');
-  const [error, setError] = useState('');
+  const [title, setTitle] = useRecoilState(newTicketTitleState);
+  const [description, setDescription] = useRecoilState(newTicketDescriptionState);
+  const [error, setError] = useRecoilState(newTicketErrorState);
   const navigate = useNavigate();
 
   const handleSubmit = async (e: FormEvent) => {

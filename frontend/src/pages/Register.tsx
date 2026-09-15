@@ -1,13 +1,13 @@
-import { useState, type FormEvent } from 'react';
+import { type FormEvent } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { useSetRecoilState } from 'recoil';
+import { useRecoilState, useSetRecoilState } from 'recoil';
 import { api } from '../api';
-import { tokenState } from '../store';
+import { tokenState, registerEmailState, registerPasswordState, registerErrorState } from '../store';
 
 export default function Register() {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
+  const [email, setEmail] = useRecoilState(registerEmailState);
+  const [password, setPassword] = useRecoilState(registerPasswordState);
+  const [error, setError] = useRecoilState(registerErrorState);
   const setToken = useSetRecoilState(tokenState);
   const navigate = useNavigate();
 

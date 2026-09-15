@@ -1,9 +1,8 @@
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { useSetRecoilState } from 'recoil';
+import { useRecoilState, useSetRecoilState } from 'recoil';
 import { api } from '../api';
-import type { Ticket } from '../api';
-import { tokenState } from '../store';
+import { tokenState, ticketListState, ticketListLoadingState } from '../store';
 
 const statusStyles: Record<string, string> = {
   open: 'bg-amber-50 text-amber-700',
@@ -12,8 +11,8 @@ const statusStyles: Record<string, string> = {
 };
 
 export default function Dashboard() {
-  const [tickets, setTickets] = useState<Ticket[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [tickets, setTickets] = useRecoilState(ticketListState);
+  const [loading, setLoading] = useRecoilState(ticketListLoadingState);
   const setToken = useSetRecoilState(tokenState);
   const navigate = useNavigate();
 
@@ -22,7 +21,7 @@ export default function Dashboard() {
       .then(setTickets)
       .catch(() => navigate('/login'))
       .finally(() => setLoading(false));
-  }, [navigate]);
+  }, [navigate, setLoading, setTickets]);
 
   return (
     <div className="min-h-screen">
